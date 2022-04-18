@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>test srpite</title>
+</head>
+<body>
+
+    <canvas id="canvas"></canvas>
+
+    <div class="controls">
+        <label for="animations">Choose Animation: </label>
+        <select name="animations" id="animations">
+            <option value="spell">spell</option>
+            <option value="walk">walk</option>
+            <option value="attack">attack</option>
+            <option value="die">die</option>
+        </select>
+    </div>
+    <script>
+    let canvas = document.getElementById('canvas');
+    let ctx = canvas.getContext('2d');
+    ctx.imageSmoothingEnabled = false;
+
+    const CANVAS_WIDTH = canvas.width = 120;
+    const CANVAS_HEIGHT = canvas.height = 120;
+    const spriteWidth = 64; //png widht / column
+    const spriteHeight = 64; // png height / row
+
+    const playerImage = new Image();
+    playerImage.src = "sprite.png"
+
+    
+    // function animate() {
+
+    //     ctx.drawImage(playerImage, 2 * spriteWidth, 20 * spriteHeight, srpiteWidth, spriteHeight, 0, 0, 300, 300)
+    //     requestAnimationFrame(animate);
+    // };
+    // animate();
+
+
+let playerState = 'spell';
+let dropdown = document.getElementById("animations");
+dropdown.addEventListener("change", (e) => {
+    playerState = e.target.value;
+})
+
+
+let gameFrame = 0;
+const staggerFrames = 8;
+const spriteAnimations = [];
+const animationState = [
+    {
+        name: 'spell',
+        frames: 7,
+        line: 3
+    },
+    {
+        name: 'walk',
+        frames: 9,
+        line: 11,
+    },
+    {
+        name: 'attack',
+        frames: 6,
+        line: 15,
+    },
+    {
+        name: 'die',
+        frames: 6,
+        line: 20,
+    }
+];
+
+animationState.forEach((state, index) => {
+    let frames = {
+        loc: [],
+    }
+    for (let j = 0; j < state.frames; j++) {
+        let positionX = j * spriteWidth;
+        let positionY = animationState[index].line * spriteHeight;
+        frames.loc.push({x: positionX, y: positionY});
+    }
+    console.log(state, " state");
+    spriteAnimations[state.name] = frames;
+    console.log(spriteAnimations, " sprites animation");
+    console.log(frames.loc, " loky loky");
+    console.log(index, '  index mon gars');
+})
+
+
+
+function animate() {
+    ctx.clearRect(0,0, CANVAS_WIDTH, CANVAS_HEIGHT);
+    let position = Math.floor(gameFrame/staggerFrames) % spriteAnimations[playerState].loc.length;
+    let frameX = spriteWidth * position;
+    let frameY = spriteAnimations[playerState].loc[position].y;
+
+    ctx.drawImage(playerImage, frameX, frameY, spriteWidth, spriteHeight, 0, 0, 120, 120)
+
+
+
+        gameFrame++;
+         requestAnimationFrame(animate);
+    // if (gameFrame < 60) {
+    //     gameFrame++;
+    //     requestAnimationFrame(animate);
+    // }
+
+
+}
+animate();
+    </script>
+
+    <!-- <script src="main.js"></script> -->
+</body>
+</html>
