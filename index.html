@@ -20,6 +20,10 @@
             <option value="die">die</option>
         </select>
     </div>
+    <button onclick="spell();">lancer un sort</button>
+    <button onclick="die();">mourrir</button>
+    <button onclick="attack();">attaquer</button>
+    <button onclick="walk();">marcher</button>
     <script>
     let canvas = document.getElementById('canvas');
     let ctx = canvas.getContext('2d');
@@ -33,22 +37,10 @@
     const playerImage = new Image();
     playerImage.src = "sprite.png"
 
-    
-    // function animate() {
 
-    //     ctx.drawImage(playerImage, 2 * spriteWidth, 20 * spriteHeight, srpiteWidth, spriteHeight, 0, 0, 300, 300)
-    //     requestAnimationFrame(animate);
-    // };
-    // animate();
+let playerState = '';
 
-
-let playerState = 'spell';
-let dropdown = document.getElementById("animations");
-dropdown.addEventListener("change", (e) => {
-    playerState = e.target.value;
-})
-
-
+let frameForStop = 60;
 let gameFrame = 0;
 const staggerFrames = 8;
 const spriteAnimations = [];
@@ -102,17 +94,57 @@ function animate() {
     ctx.drawImage(playerImage, frameX, frameY, spriteWidth, spriteHeight, 0, 0, 120, 120)
 
 
-
+    if (gameFrame < frameForStop) {
         gameFrame++;
-         requestAnimationFrame(animate);
-    // if (gameFrame < 60) {
-    //     gameFrame++;
-    //     requestAnimationFrame(animate);
-    // }
+        requestAnimationFrame(animate);
+    }
 
 
+    console.log("1");
 }
-animate();
+// animate();
+
+function spell() {
+    gameFrame = 0;
+    frameForStop = 60;
+    playerState = "spell";
+    animate();
+};
+
+function die() {
+    gameFrame = 0;
+    frameForStop = 40;
+    playerState = "die";
+    animate();
+}
+
+function attack() {
+    gameFrame = 0;
+    frameForStop = 60;
+    playerState = "attack";
+    animate();
+}
+
+function walk() {
+    gameFrame = 0;
+    frameForStop = 220;
+    playerState = "walk";
+    animate();
+}
+
+function game() {
+    
+}
+
+function apparitions() {
+    canvas.style.animationName = "reveal" ;
+    walk();
+}
+apparitions();
+
+
+
+
     </script>
 
     <!-- <script src="main.js"></script> -->
