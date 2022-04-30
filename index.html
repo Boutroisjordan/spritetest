@@ -222,9 +222,6 @@ function walk() {
     animate();
 }
 
-function game() {
-    
-}
 
 function apparitions() {
     canvas.style.animationName = "reveal" ;
@@ -233,8 +230,29 @@ function apparitions() {
 apparitions();
 
 // Bot function animations
+function spellBot() {
+    gameFrameBot = 0;
+    frameForStop = 60;
+    botState = "spell";
+    animateBot();
+};
+
+function dieBot() {
+    gameFrameBot = 0;
+    frameForStop = 40;
+    botState = "die";
+    animateBot();
+}
+
+function attackBot() {
+    gameFrameBot = 0;
+    frameForStop = 60;
+    botState = "attack";
+    animateBot();
+}
+
 function walkBot() {
-    gameFrame = 0;
+    gameFrameBot = 0;
     frameForStop = 220;
     botState = "walk";
     animateBot();
