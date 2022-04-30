@@ -10,21 +10,27 @@
 <body>
 
     <div class="container">
+
         <div class="player">
             <canvas id="canvas"></canvas>
-    
+            <div class="controls">
             <button onclick="spell();">lancer un sort</button>
             <button onclick="die();">mourrir</button>
             <button onclick="attack();">attaquer</button>
             <button onclick="walk();">marcher</button>
+            </div>
+            
         </div>
 
         <div class="bot">
             <canvas id="bot"></canvas>
-            <button onclick="spell();">lancer un sort</button>
-            <button onclick="die();">mourrir</button>
-            <button onclick="attack();">attaquer</button>
+            <div class="controls">
+            <button onclick="spellBot();">lancer un sort</button>
+            <button onclick="dieBot();">mourrir</button>
+            <button onclick="attackBot();">attaquer</button>
             <button onclick="walkBot();">marcher</button>
+            </div>
+            
         </div>
 
     </div>
@@ -37,7 +43,7 @@
     //player
     let canvas = document.getElementById('canvas');
     let ctx = canvas.getContext('2d');
-    ctx.imageSmoothingEnabled = false;
+    ctx.imageSmoothingEnabled = true;
 
     //bot
     let canvasBot = document.getElementById('bot');
@@ -48,6 +54,9 @@
     // commun
     const CANVAS_WIDTH = canvas.width = 120;
     const CANVAS_HEIGHT = canvas.height = 120;
+
+    const CANVAS_WIDTH_BOT = canvasBot.width = 120;
+    const CANVAS_HEIGHT_BOT = canvasBot.height = 120;
     const spriteWidth = 64; //png widht / column
     const spriteHeight = 64; // png height / row
 
@@ -62,6 +71,7 @@ let botState = '';
 
 let frameForStop = 60;
 let gameFrame = 0;
+let gameFrameBot = 0;
 const staggerFrames = 8;
 const spriteAnimations = [];
 const spriteAnimationsBot = [];
@@ -167,15 +177,15 @@ animationStateBot.forEach((state, index) => {
 
 
 function animateBot() {
-    ctxBot.clearRect(0,0, CANVAS_WIDTH, CANVAS_HEIGHT);
-    let position = Math.floor(gameFrame/staggerFrames) % spriteAnimationsBot[botState].loc.length;
+    ctxBot.clearRect(0,0, CANVAS_WIDTH_BOT, CANVAS_HEIGHT_BOT);
+    let position = Math.floor(gameFrameBot/staggerFrames) % spriteAnimationsBot[botState].loc.length;
     let frameX = spriteWidth * position;
     let frameY = spriteAnimationsBot[botState].loc[position].y;
     ctxBot.drawImage(playerImage, frameX, frameY, spriteWidth, spriteHeight, 0, 0, 120, 120)
 
 
-    if (gameFrame < frameForStop) {
-        gameFrame++;
+    if (gameFrameBot < frameForStop) {
+        gameFrameBot++;
         requestAnimationFrame(animateBot);
     }
 
@@ -229,6 +239,12 @@ function walkBot() {
     botState = "walk";
     animateBot();
 }
+
+function apparitionsBot() {
+    canvasBot.style.animationName = "revealBot" ;
+    walkBot();
+}
+apparitionsBot();
 
     </script>
 
