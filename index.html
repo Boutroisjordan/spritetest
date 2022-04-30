@@ -8,27 +8,44 @@
     <title>test srpite</title>
 </head>
 <body>
-<!-- changement juste ici -->
-    <canvas id="canvas"></canvas>
 
-    <div class="controls">
-        <label for="animations">Choose Animation: </label>
-        <select name="animations" id="animations">
-            <option value="spell">spell</option>
-            <option value="walk">walk</option>
-            <option value="attack">attack</option>
-            <option value="die">die</option>
-        </select>
+    <div class="container">
+        <div class="player">
+            <canvas id="canvas"></canvas>
+    
+            <button onclick="spell();">lancer un sort</button>
+            <button onclick="die();">mourrir</button>
+            <button onclick="attack();">attaquer</button>
+            <button onclick="walk();">marcher</button>
+        </div>
+
+        <div class="bot">
+            <canvas id="bot"></canvas>
+            <button onclick="spell();">lancer un sort</button>
+            <button onclick="die();">mourrir</button>
+            <button onclick="attack();">attaquer</button>
+            <button onclick="walkBot();">marcher</button>
+        </div>
+
     </div>
-    <button onclick="spell();">lancer un sort</button>
-    <button onclick="die();">mourrir</button>
-    <button onclick="attack();">attaquer</button>
-    <button onclick="walk();">marcher</button>
+
+        
+
+
+    
     <script>
+    //player
     let canvas = document.getElementById('canvas');
     let ctx = canvas.getContext('2d');
     ctx.imageSmoothingEnabled = false;
 
+    //bot
+    let canvasBot = document.getElementById('bot');
+    let ctxBot = canvasBot.getContext('2d');
+    ctxBot.imageSmoothingEnabled = false;
+
+
+    // commun
     const CANVAS_WIDTH = canvas.width = 120;
     const CANVAS_HEIGHT = canvas.height = 120;
     const spriteWidth = 64; //png widht / column
@@ -37,13 +54,17 @@
     const playerImage = new Image();
     playerImage.src = "sprite.png"
 
-
+//player
 let playerState = '';
+
+//bot
+let botState = '';
 
 let frameForStop = 60;
 let gameFrame = 0;
 const staggerFrames = 8;
 const spriteAnimations = [];
+const spriteAnimationsBot = [];
 const animationState = [
     {
         name: 'spell',
@@ -67,6 +88,30 @@ const animationState = [
     }
 ];
 
+const animationStateBot = [
+    {
+        name: 'spell',
+        frames: 7,
+        line: 1
+    },
+    {
+        name: 'walk',
+        frames: 9,
+        line: 9,
+    },
+    {
+        name: 'attack',
+        frames: 6,
+        line: 13,
+    },
+    {
+        name: 'die',
+        frames: 6,
+        line: 20,
+    }
+];
+
+//player
 animationState.forEach((state, index) => {
     let frames = {
         loc: [],
@@ -76,11 +121,11 @@ animationState.forEach((state, index) => {
         let positionY = animationState[index].line * spriteHeight;
         frames.loc.push({x: positionX, y: positionY});
     }
-    console.log(state, " state");
+    // console.log(state, " state");
     spriteAnimations[state.name] = frames;
-    console.log(spriteAnimations, " sprites animation");
-    console.log(frames.loc, " loky loky");
-    console.log(index, '  index mon gars');
+    // console.log(spriteAnimations, " sprites animation");
+    // console.log(frames.loc, " loky loky");
+    // console.log(index, '  index mon gars');
 })
 
 
@@ -90,7 +135,6 @@ function animate() {
     let position = Math.floor(gameFrame/staggerFrames) % spriteAnimations[playerState].loc.length;
     let frameX = spriteWidth * position;
     let frameY = spriteAnimations[playerState].loc[position].y;
-
     ctx.drawImage(playerImage, frameX, frameY, spriteWidth, spriteHeight, 0, 0, 120, 120)
 
 
@@ -99,11 +143,47 @@ function animate() {
         requestAnimationFrame(animate);
     }
 
+    console.log("1");
+}
+
+
+//bot
+
+animationStateBot.forEach((state, index) => {
+    let frames = {
+        loc: [],
+    }
+    for (let j = 0; j < state.frames; j++) {
+        let positionX = j * spriteWidth;
+        let positionY = animationStateBot[index].line * spriteHeight;
+        frames.loc.push({x: positionX, y: positionY});
+    }
+    console.log(state, " state");
+    spriteAnimationsBot[state.name] = frames;
+    console.log(spriteAnimationsBot, " sprites animation");
+    console.log(frames.loc, " loky loky");
+    console.log(index, '  index bot mon gars');
+})
+
+
+function animateBot() {
+    ctxBot.clearRect(0,0, CANVAS_WIDTH, CANVAS_HEIGHT);
+    let position = Math.floor(gameFrame/staggerFrames) % spriteAnimationsBot[botState].loc.length;
+    let frameX = spriteWidth * position;
+    let frameY = spriteAnimationsBot[botState].loc[position].y;
+    ctxBot.drawImage(playerImage, frameX, frameY, spriteWidth, spriteHeight, 0, 0, 120, 120)
+
+
+    if (gameFrame < frameForStop) {
+        gameFrame++;
+        requestAnimationFrame(animateBot);
+    }
 
     console.log("1");
 }
 // animate();
 
+// PLAYER function animations
 function spell() {
     gameFrame = 0;
     frameForStop = 60;
@@ -142,8 +222,13 @@ function apparitions() {
 }
 apparitions();
 
-
-
+// Bot function animations
+function walkBot() {
+    gameFrame = 0;
+    frameForStop = 220;
+    botState = "walk";
+    animateBot();
+}
 
     </script>
 
