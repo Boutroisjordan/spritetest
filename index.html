@@ -18,6 +18,7 @@
             <button onclick="die();">mourrir</button>
             <button onclick="attack();">attaquer</button>
             <button onclick="walk();">marcher</button>
+            <button onclick="hit();">hit</button>
             </div>
             
         </div>
@@ -29,6 +30,7 @@
             <button onclick="dieBot();">mourrir</button>
             <button onclick="attackBot();">attaquer</button>
             <button onclick="walkBot();">marcher</button>
+            <button onclick="stopTime();">stop on t'a dit</button>
             </div>
             
         </div>
@@ -94,6 +96,11 @@ const animationState = [
     {
         name: 'die',
         frames: 6,
+        line: 20,
+    },
+    {
+        name: 'hit',
+        frames: 3,
         line: 20,
     }
 ];
@@ -208,6 +215,13 @@ function die() {
     animate();
 }
 
+function hit() {
+    gameFrame = 0;
+    frameForStop = 30;
+    playerState = "hit";
+    animate();
+}
+
 function attack() {
     gameFrame = 0;
     frameForStop = 60;
@@ -264,6 +278,50 @@ function apparitionsBot() {
 }
 apparitionsBot();
 
+
+function combat() {
+    choixDuSortPlayer();
+    damagePlayerToBot();
+    choixDuSortBot();
+    damageBotToPlayer();
+}
+
+let timeOut;
+
+function choixDuSortPlayer() {
+    //rendre le html cliquable et/ou visible
+
+
+    //timer de 30 seconde visible en haut entre les barres de vies
+    timeOut = setTimeout(tooLate, 10000);
+
+
+    
+}
+choixDuSortPlayer();
+
+function tooLate() {
+    alert("c'est perdu");
+}
+
+//funciton à mettre au clique sur chacun des sorts Player pour stopper le chrono
+function stopTime() {
+  clearTimeout(timeOut);
+}
+
+
+
+function damagePlayerToBot() {
+
+}
+
+function choixDuSortBot() {
+
+}
+
+function damageBotToPlayer() {
+
+}
     </script>
 
     <!-- <script src="main.js"></script> -->
